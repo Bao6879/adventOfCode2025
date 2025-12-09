@@ -11,7 +11,7 @@ int main()
 {
 	char ch;
     string s;
-	l i, tmp
+	l i, tmp;
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	while (getline(cin, s))
     {
