@@ -4,99 +4,46 @@ using namespace std;
 #define eb emplace_back
 const l maxn=1005;
 l n, ans;
-vector <string> v[5];
-vector <char> vc;
 string inp[maxn];
+l dp[maxn][maxn];
 int main()
 {
-	char ch;
-    string s, s1, s2, s3, s4;
-	l i, j, k=0, idx=0, sta, en;
+	l i, j;
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	while (getline(cin, inp[n]))
     {
         if (inp[n]=="")
             break;
-        k=max(k, (l)(inp[n].size()));
         n++;
     }
-    for (i=0; i<n; i++)
+    for (j=0; j<inp[0].size(); j++)
     {
-        while (inp[i].size()<k)
-            inp[i]+=' ';
+        if (inp[0][j]=='S')
+        {
+            dp[0][j]=1;
+        }
     }
-    while (cin>>ch)
+    for (i=0; i<n-1; i++)
     {
-        if (ch=='-')
-            break;
-        vc.eb(ch);
-    }
-    i=0;
-    while (idx<inp[0].size())
-    {
-        l res;
-        if (vc[i]=='*')
-            res=1;
-        else
-            res=0;
-        sta=idx;
-        en=idx;
-        while (inp[0][idx]==' ' || inp[1][idx]==' ' || inp[2][idx]==' ' || inp[3][idx]==' ')
+        for (j=0; j<inp[i].size(); j++)
         {
-            if (inp[0][idx]==' ' && inp[1][idx]==' ' && inp[2][idx]==' ' && inp[3][idx]==' ')
-                break;
-            en++;
-            idx++;
-            if (idx>=inp[0].size())
-                break;
-        }
-        while (inp[0][idx]!=' ' || inp[1][idx]!=' ' || inp[2][idx]!=' ' || inp[3][idx]==' ')
-        {
-            if (inp[0][idx]==' ' && inp[1][idx]==' ' && inp[2][idx]==' ' && inp[3][idx]==' ')
-                break;
-            en++;
-            idx++;
-            if (idx>=inp[0].size())
-                break;
-        }
-        while (inp[0][idx]==' ' || inp[1][idx]==' ' || inp[2][idx]==' ' || inp[3][idx]==' ')
-        {
-            if (inp[0][idx]==' ' && inp[1][idx]==' ' && inp[2][idx]==' ' && inp[3][idx]==' ')
-                break;
-            en++;
-            idx++;
-            if (idx>=inp[0].size())
-                break;
-        }
-        if (idx>=inp[0].size())
-            en--;
-        while (inp[0][en]==' ' && inp[1][en]==' ' && inp[2][en]==' ' && inp[3][en]==' ')
-            en--;
-        while (inp[0][sta]==' ' && inp[1][sta]==' ' && inp[2][sta]==' ' && inp[3][sta]==' ')
-            sta++;
-        for (j=en; j>=sta; j--)
-        {
-            l num=0;
-            for (k=0; k<4; k++)
+            if (dp[i][j]!=0)
             {
-                if (inp[k][j]==' ')
+                if (inp[i+1][j]=='^')
                 {
-                    continue;
+                    dp[i+1][j+1]+=dp[i][j];
+                    dp[i+1][j-1]+=dp[i][j];
                 }
                 else
                 {
-                    num*=10;
-                    num+=inp[k][j]-48;
+                    dp[i+1][j]+=dp[i][j];
                 }
             }
-            if (vc[i]=='*')
-                res*=num;
-            else
-                res+=num;
         }
-        ans+=res;
-        idx++;
-        i++;
+    }
+    for (i=0; i<inp[0].size(); i++)
+    {
+        ans+=dp[n-2][i];
     }
     cout<<ans;
 }
